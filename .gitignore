@@ -92,3 +92,8 @@ composer.lock
 
 # OS files
 Thumbs.db
+
+# Generated arginfo
+xxhash_arginfo.h
+gen_stub.php
+PHP-Parser-*/

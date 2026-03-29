@@ -10,21 +10,18 @@
 /* xxhash */
 #include "xxhash.h"
 
+/* Generated arginfo */
+#include "xxhash_arginfo.h"
+
 /* Constants */
 #define XXHASH_HEX_LENGTH 8
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_horde_xxhash, 0, 0, 1) ZEND_ARG_INFO(0, data)
-ZEND_END_ARG_INFO()
-
-const zend_function_entry horde_xxhash_functions[] = {
-    PHP_FE(horde_xxhash, arginfo_horde_xxhash) PHP_FE_END};
 
 zend_module_entry horde_xxhash_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
 #endif
     "horde_xxhash",
-    horde_xxhash_functions,
+    ext_functions,
     NULL,
     NULL,
     NULL,
@@ -66,21 +63,20 @@ PHP_FUNCTION(horde_xxhash) {
 #else
 
 PHP_FUNCTION(horde_xxhash) {
-    char *data = NULL;
-    size_t data_len;
+    zend_string *data = NULL;
     zend_string *hash;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &data, &data_len) ==
-        FAILURE) {
-        RETURN_FALSE;
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_STR(data)
+    ZEND_PARSE_PARAMETERS_END();
+
+    if (ZSTR_LEN(data) > INT_MAX) {
+        zend_argument_value_error(1, "input data exceeds maximum size");
+        RETURN_THROWS();
     }
 
-    if (data_len > INT_MAX) {
-        zend_error(E_WARNING, "horde_xxhash: input data exceeds maximum size");
-        RETURN_FALSE;
-    }
-
-    hash = strpprintf(XXHASH_HEX_LENGTH, "%08x", XXH32(data, (int)data_len, 0));
+    hash = strpprintf(XXHASH_HEX_LENGTH, "%08x",
+                      XXH32(ZSTR_VAL(data), (int)ZSTR_LEN(data), 0));
 
     RETURN_STR(hash);
 }
