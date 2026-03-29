@@ -63,6 +63,13 @@ jobs:
           TEST_PHP_ARGS="-d extension=$(pwd)/modules/horde_xxhash.so" \
           /usr/bin/php${{ matrix.php-version }} run-tests.php tests/
 
+      - name: Smoke Test
+        id: smoke-test
+        run: |
+          # Quick functionality check
+          php${{ matrix.php-version }} -d extension=modules/horde_xxhash.so \
+            -r "echo horde_xxhash('test') . PHP_EOL;"
+
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -100,3 +107,106 @@ jobs:
             echo "❌ PHPT tests failed"
             exit 1
           fi
+
+  code-format:
+    name: Code Formatting Check
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install clang-format-20
+        run: |
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main"
+          sudo apt-get update
+          sudo apt-get install -y clang-format-20
+
+      - name: Check code formatting
+        run: |
+          # Check if files need formatting
+          clang-format-20 --dry-run --Werror horde_xxhash.c horde_xxhash.h
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          # Install PHP dev headers and clang-tidy-20
+          sudo add-apt-repository ppa:ondrej/php -y
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main"
+          sudo apt-get update
+          sudo apt-get install -y php8.4-dev clang-tidy-20
+
+      - name: Run clang-tidy
+        run: |
+          clang-tidy-20 --checks='readability-*,bugprone-*' horde_xxhash.c -- \
+            -I/usr/include/php/20240924 \
+            -I/usr/include/php/20240924/main \
+            -I/usr/include/php/20240924/TSRM \
+            -I/usr/include/php/20240924/Zend \
+            -I.
+
+  address-sanitizer:
+    name: Address Sanitizer (PHP 8.4)
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo add-apt-repository ppa:ondrej/php -y
+          sudo apt-get update
+          sudo apt-get install -y php8.4-dev php8.4-cli
+
+      - name: Build with ASan
+        run: |
+          phpize8.4
+          ./configure --with-php-config=/usr/bin/php-config8.4 \
+            CFLAGS="-fsanitize=address -g -O1" \
+            LDFLAGS="-fsanitize=address"
+          make
+
+      - name: Run tests with ASan
+        run: |
+          LD_PRELOAD=$(gcc -print-file-name=libasan.so) \
+          TEST_PHP_EXECUTABLE=/usr/bin/php8.4 \
+          TEST_PHP_ARGS="-d extension=$(pwd)/modules/horde_xxhash.so" \
+          /usr/bin/php8.4 run-tests.php tests/
+
+  valgrind:
+    name: Valgrind Memory Check (PHP 8.4)
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo add-apt-repository ppa:ondrej/php -y
+          sudo apt-get update
+          sudo apt-get install -y php8.4-dev php8.4-cli valgrind
+
+      - name: Build extension
+        run: |
+          phpize8.4
+          ./configure --with-php-config=/usr/bin/php-config8.4
+          make
+
+      - name: Run Valgrind
+        run: |
+          valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 \
+            php8.4 -d extension=$(pwd)/modules/horde_xxhash.so \
+            -r "echo horde_xxhash('test') . PHP_EOL;"

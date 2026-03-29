@@ -1,0 +1,41 @@
+# Based on LLVM style with PHP extension adjustments
+BasedOnStyle: LLVM
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 4
+
+# Braces
+BreakBeforeBraces: Linux
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# Spacing
+SpaceBeforeParens: ControlStatements
+SpaceAfterCStyleCast: false
+PointerAlignment: Right
+SpacesInParentheses: false
+
+# Line length
+ColumnLimit: 80
+AlwaysBreakAfterReturnType: None
+
+# Includes - keep as-is
+SortIncludes: Never
+IncludeBlocks: Preserve
+
+# Macros - preserve formatting for PHP extension macros
+AttributeMacros:
+  - PHP_FE
+  - PHP_FE_END
+  - ZEND_BEGIN_ARG_INFO_EX
+  - ZEND_END_ARG_INFO
+  - ZEND_ARG_INFO
+  - PHP_FUNCTION
+  - PHP_MINFO_FUNCTION
+
+# Allow some flexibility for macro-heavy code
+AlignConsecutiveMacros: Consecutive
