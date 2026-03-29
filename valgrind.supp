@@ -1,0 +1,92 @@
+# Valgrind suppression file for PHP core startup "leaks"
+# These are intentional one-time allocations that live for process lifetime
+# Format: http://valgrind.org/docs/manual/manual-core.html#manual-core.suppress
+
+{
+   php_zend_register_constants
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:__zend_malloc
+   fun:zend_register_constant
+   ...
+   fun:php_module_startup
+}
+
+{
+   php_zend_register_functions
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   ...
+   fun:zend_register_functions
+   ...
+   fun:php_module_startup
+}
+
+{
+   php_zend_hash_table_init
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:__zend_malloc
+   ...
+   fun:_zend_hash_init*
+   ...
+   fun:php_module_startup
+}
+
+{
+   php_module_startup_general
+   Memcheck:Leak
+   match-leak-kinds: possible,reachable
+   fun:malloc
+   fun:__zend_malloc
+   ...
+   fun:php_module_startup
+}
+
+{
+   php_load_extension_general
+   Memcheck:Leak
+   match-leak-kinds: possible,reachable
+   fun:malloc
+   ...
+   fun:php_load_extension
+}
+
+{
+   glibc_getaddrinfo
+   Memcheck:Leak
+   match-leak-kinds: definite,possible
+   fun:malloc
+   ...
+   fun:getaddrinfo
+}
+
+{
+   glibc_setlocale
+   Memcheck:Leak
+   match-leak-kinds: possible,reachable
+   fun:malloc
+   ...
+   fun:setlocale
+}
+
+{
+   dlopen_internals
+   Memcheck:Leak
+   match-leak-kinds: possible,reachable
+   fun:calloc
+   ...
+   fun:dlopen*
+}
+
+{
+   zend_ini_startup
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   ...
+   fun:zend_ini_startup
+}

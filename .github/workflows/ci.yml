@@ -157,7 +157,7 @@ jobs:
   address-sanitizer:
     name: Address Sanitizer (PHP 8.4)
     runs-on: ubuntu-24.04
-    continue-on-error: true
+    continue-on-error: false
 
     steps:
       - name: Checkout code
@@ -179,6 +179,7 @@ jobs:
 
       - name: Run tests with ASan
         run: |
+          LSAN_OPTIONS="suppressions=$(pwd)/asan.supp" \
           LD_PRELOAD=$(gcc -print-file-name=libasan.so) \
           TEST_PHP_EXECUTABLE=/usr/bin/php8.4 \
           TEST_PHP_ARGS="-d extension=$(pwd)/modules/horde_xxhash.so" \
@@ -187,7 +188,7 @@ jobs:
   valgrind:
     name: Valgrind Memory Check (PHP 8.4)
     runs-on: ubuntu-24.04
-    continue-on-error: true
+    continue-on-error: false
 
     steps:
       - name: Checkout code
@@ -207,6 +208,7 @@ jobs:
 
       - name: Run Valgrind
         run: |
-          valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 \
+          valgrind --leak-check=full --show-leak-kinds=all \
+            --suppressions=valgrind.supp --error-exitcode=1 \
             php8.4 -d extension=$(pwd)/modules/horde_xxhash.so \
             -r "echo horde_xxhash('test') . PHP_EOL;"

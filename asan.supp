@@ -1,0 +1,23 @@
+# ASan/LSan suppression file for PHP core startup "leaks"
+# These are intentional one-time allocations that live for process lifetime
+
+# dlopen/dlclose module loading
+leak:dlopen
+leak:call_init
+leak:_dl_init
+leak:dl_open_worker
+
+# PHP module startup
+leak:php_module_startup
+leak:php_load_extension
+leak:php_load_shlib
+leak:zend_startup_module_ex
+
+# glibc getaddrinfo DNS resolver cache
+leak:getaddrinfo
+leak:gaih_inet
+leak:generate_addrinfo
+
+# Zend engine initialization
+leak:zend_hash_apply
+leak:zend_llist_apply
