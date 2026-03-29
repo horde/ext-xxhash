@@ -1,0 +1,17 @@
+---
+3.0.0:
+  api: 3.0.0
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-29
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: |
+    [MAJOR] Modernize for PHP 8.2+ and PIE distribution
+    [MAJOR] Migrate to PIE (PHP Installer for Extensions) from PECL
+    [MAJOR] Require PHP 8.2+
+    [MAJOR] Add Composer metadata for PIE compatibility
+    [ENHANCEMENT] Add modern test infrastructure
+    [ENHANCEMENT] Add GitHub Actions CI workflow
