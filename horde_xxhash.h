@@ -7,11 +7,11 @@ extern zend_module_entry horde_xxhash_module_entry;
 #define HORDE_XXHASH_EXT_VERSION "1.0.0"
 
 #ifdef PHP_WIN32
-#   define PHP_HORDE_XXHASH_API __declspec(dllexport)
+#define PHP_HORDE_XXHASH_API __declspec(dllexport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_HORDE_XXHASH_API __attribute__ ((visibility("default")))
+#define PHP_HORDE_XXHASH_API __attribute__((visibility("default")))
 #else
-#   define PHP_HORDE_XXHASH_API
+#define PHP_HORDE_XXHASH_API
 #endif
 
 #ifdef ZTS
@@ -22,4 +22,4 @@ PHP_MINFO_FUNCTION(horde_xxhash);
 
 PHP_FUNCTION(horde_xxhash);
 
-#endif  /* PHP_HORDE_XXHASH_H */
+#endif /* PHP_HORDE_XXHASH_H */
