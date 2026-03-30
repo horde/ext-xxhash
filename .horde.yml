@@ -36,9 +36,6 @@ provides:
   ext-horde_xxhash: 3.0.0
 dependencies:
   required:
-    php: ^8.2
-  dev:
-    composer:
-      phpunit/phpunit: ^12
+    php: ^8.0
 vendor: horde
 homepage: https://www.horde.org
