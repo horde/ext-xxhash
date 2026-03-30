@@ -1,0 +1,35 @@
+# EditorConfig configuration for horde/ext-xxhash
+# https://EditorConfig.org
+
+root = true
+
+# Defaults for all files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C source files
+[*.{c,h}]
+indent_style = space
+indent_size = 4
+max_line_length = 80
+
+# PHP files (stub, tests)
+[*.{php,phpt}]
+indent_style = space
+indent_size = 4
+
+# YAML files (CI, .horde.yml)
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Markdown documentation
+[*.md]
+trim_trailing_whitespace = false
+
+# Makefiles require tabs
+[{Makefile,*.mk,*.m4}]
+indent_style = tab
