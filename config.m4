@@ -31,7 +31,7 @@ if test "$PHP_HORDE_XXHASH" != "no"; then
   ifdef([PHP_INSTALL_HEADERS],
   [
     PHP_INSTALL_HEADERS([ext/horde_xxhash/], [horde_xxhash.h])
-  ], [
-    PHP_ADD_MAKEFILE_FRAGMENT
   ])
+
+  PHP_ADD_MAKEFILE_FRAGMENT
 fi
