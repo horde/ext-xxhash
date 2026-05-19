@@ -97,3 +97,17 @@ Thumbs.db
 xxhash_arginfo.h
 gen_stub.php
 PHP-Parser-*/
+
+# Added by horde-components QC --fix-qc-issues
+# Claude Code CLI cache and state
+/.claude/
+# Cline extension data
+/.cline/
+# PHP CS Fixer cache file
+/.php-cs-fixer.cache
+# PHPUnit Cache (other)
+/.phpunit.cache
+# PHPStan local configuration
+/phpstan.neon
+# PHPStan cache directory
+/.phpstan.cache/

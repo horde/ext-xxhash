@@ -1,4 +1,35 @@
 ---
+3.0.1-RC1:
+  api: 3.0.1-RC1
+  state:
+    release: RC
+    api: RC
+  date: 2026-05-19
+  license:
+    identifier: BSD-2-Clause
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: |-
+    style: Onboard EditorConfig file for consistent use in editors
+    chore: Allow PHP versions starting from 8.0
+    feat: Pull extension version from .horde.yml on build
+    feat: Use modern stubs for arginfo generation
+    ci: Hide false positives from php core and make new asan issues a hard fail
+    ci: Add code quality tools to pipeline
+    style: apply clang-format 20 and prefer constants over magic numbers
+    docs: Start a changelog.yml file
+    chore: Remove package.json, add .horde.yml and composer.json
+    ci: Add basic build and test pipeline
+    test: Update php tests from PHPUnit 4 to phpt upstream standard
+    chore(gitignore): Add phpize build artifacts
+    docs: Clarify intent of this package
+    Merge commit '2b7fa546469029009782bcab89c41c9c108f2da6'
+    Happy New Year!
+    Now that all tests pass on PHP 7, bump supported PHP version at least for all packages that have tests.
+    Add PHP 7 support.
+    Happy New Year!
+    Happy New Year!
+    Exclude BC breaking PHP versions.
+    Standard project directories initialized by cvs2svn.
 3.0.0:
   api: 3.0.0
   state:
